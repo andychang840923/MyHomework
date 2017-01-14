@@ -13,10 +13,13 @@
 @end
 
 @implementation ViewController
+extern NSMutableArray *list;
+extern NSInteger currentChoice;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
+   
 }
 
 

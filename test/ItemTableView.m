@@ -7,7 +7,8 @@
 //
 
 #import "ItemTableView.h"
-#import "CustemCellItem.h"
+
+
 @interface ItemTableView ()
 
 @end
@@ -18,8 +19,38 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     list = [[NSMutableArray alloc] init];
-    [list addObject:[NSArray arrayWithObjects:@"牙膏",@"1" ,nil]];
-    [list addObject:[NSArray arrayWithObjects:@"牙刷",@"2", nil]];
+ //   [list addObject:[NSArray arrayWithObjects:@"牙膏",@"1",@"10",@"2017-4-3" ,@"",nil]];
+ //   [list addObject:[NSArray arrayWithObjects:@"牙刷",@"2",@"10",@"2017-4-3" ,@"" ,nil]];
+  //  UITableView.delegate=self;
+    _itemTable.refreshControl= [UIRefreshControl new];
+    [_itemTable.refreshControl addTarget:self action:@selector(handleRefresh) forControlEvents:UIControlEventValueChanged];
+    NSFileManager *fm=[NSFileManager defaultManager];
+    NSString *dir = [NSHomeDirectory() stringByAppendingString:@"/Documents/data"];
+    NSString *file = [dir stringByAppendingString:@"/itemlist.txt"];
+    NSError *error = nil;
+    BOOL isExist=[NSHomeDirectory() stringByAppendingString:@"/Documents/data/itemlist.txt"];
+    if(!isExist){
+        BOOL success = [fm createDirectoryAtPath:dir withIntermediateDirectories:YES attributes:nil error:&error];
+    
+        if(success){
+            NSLog(@"目录建造成功");
+        }else {
+            NSLog(@"目录建立失败");
+        }
+    
+        success = [fm createFileAtPath:file contents:nil attributes:nil];
+        
+        if(success){
+            NSLog(@"文件建造成功");
+        }else {
+            NSLog(@"文件建立失败");
+        }
+    }else{
+        NSLog(@"文件已存在");
+       /* NSString *text = [[NSString alloc]initWithContentsOfFile:file encoding:NSUTF8StringEncoding error:nil];*/
+        list = [[NSMutableArray alloc] initWithContentsOfFile:file];
+        NSLog(@"%@",list);
+    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -33,20 +64,18 @@
     return [list count];
 }
 
+-(void) viewDidAppear:(BOOL)animated{
+   _itemTable.refreshControl.attributedTitle=[[NSAttributedString alloc]initWithString:@"更新中..." ];
+}
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     static NSString *identifier = @"Cell";
-    CustemCellItem *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identifier];
     if (cell == nil){
-        NSArray *views = [[NSBundle mainBundle]loadNibNamed:@"CustemCellItem" owner:nil options:nil];
-        for(UIView *view in views){
-            if([view isKindOfClass:[CustemCellItem class]]){
-                cell = (CustemCellItem*)view;
-            }
-        }
+        cell=[[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
     }
-    cell.leftLabel.text=[[list objectAtIndex:indexPath.row] objectAtIndex:0];
-    cell.rightLabel.text=[[list objectAtIndex:indexPath.row] objectAtIndex:1];
+    cell.textLabel.text=[[list objectAtIndex:indexPath.row] objectAtIndex:0];
+   // cell.rightLabel.text=[[list objectAtIndex:indexPath.row] objectAtIndex:1];
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     return cell;
 }
@@ -58,8 +87,25 @@
 - (void)tableView:(UITableView*)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath{
     [list removeObjectAtIndex:indexPath.row];
     [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationTop];
+    NSString *path = [NSHomeDirectory() stringByAppendingString:@"/Documents/data/itemlist.txt"];
+    [list writeToFile:path atomically:YES];
     
 }
+
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    currentChoice=[indexPath row];
+}
+
+-(void)handleRefresh{
+    [NSThread sleepForTimeInterval:2.0];
+    [_itemTable.refreshControl endRefreshing];
+    [self.itemTable reloadData];
+    
+}
+
+
+
 /*
 #pragma mark - Navigation
 

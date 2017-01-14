@@ -7,9 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-
-@interface ItemTableView : UIViewController <UITableViewDataSource,UITableViewDelegate>
-{
-    NSMutableArray *list;
+#import "Constant.h"
+@interface ItemTableView : UIViewController <UITableViewDataSource,UITableViewDelegate> {
 }
+@property (strong, nonatomic) IBOutlet UIButton *buttonPress;
+@property (strong, nonatomic) IBOutlet UITableView *itemTable;
 @end
