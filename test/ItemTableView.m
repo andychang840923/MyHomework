@@ -100,6 +100,8 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     currentChoice=[indexPath row];
+    UIViewController *vc= [self.storyboard instantiateViewControllerWithIdentifier:@"itemDetail"];
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 -(void)handleRefresh{

@@ -70,6 +70,7 @@ extern NSMutableArray*orderlist;
     path=[NSHomeDirectory() stringByAppendingString:@"/Documents/data/orderlist.txt"];
     [orderlist writeToFile:path  atomically:YES];
     NSLog(@"%@",list);
+    [self.navigationController popViewControllerAnimated:YES];
     /*
     for (NSString *string in list) {
         NSLog(@"array6 content is %@",string);
