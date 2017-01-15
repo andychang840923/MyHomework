@@ -30,6 +30,9 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="账簿" id="Ly2-QC-Moi"/>
+                    <connections>
+                        <outlet property="ordertable" destination="qcc-iF-noo" id="0dU-Zo-gUo"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="oG5-Tk-KWJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

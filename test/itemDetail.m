@@ -14,6 +14,7 @@
 
 @implementation itemDetail
 extern NSMutableArray *list;
+extern NSMutableArray *orderlist;
 extern NSInteger currentChoice;
 
 - (NSString *)stringFromDate:(NSDate *)date{
@@ -64,6 +65,7 @@ extern NSInteger currentChoice;
     NSLog(@"%@",_Date.date);
     NSDate*inputDate = [dateFormatter dateFromString:[[list objectAtIndex:currentChoice] objectAtIndex:3]];
     _Date.date=inputDate;
+    _Option.text=[[list objectAtIndex:currentChoice] objectAtIndex:4];
     //NSLog(@date= %@, inputDate);
 }
 
@@ -80,7 +82,25 @@ extern NSInteger currentChoice;
     
     UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         NSString*addNum=((UITextField*)[alertController.textFields objectAtIndex:0]).text;
-        NSString*addPrice = ((UITextField*)[alertController.textFields objectAtIndex:1]).text;
+        int origin=[_Num.text intValue];
+        int add=[addNum intValue];
+        origin = origin+add;
+        NSString *temp=[NSString stringWithFormat:@"%d",origin];
+        NSString* addPrice = ((UITextField*)[alertController.textFields objectAtIndex:1]).text;
+        int p=[addPrice intValue];
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateFormat:@"yyyy-MM-dd"];
+
+        NSString *da=[dateFormatter stringFromDate:_Date.date];
+        [orderlist addObject:[NSArray arrayWithObjects:_Name.text,addNum,addPrice,nil]];
+        NSLog(@"%@",orderlist);
+        [list removeObjectAtIndex:currentChoice];
+        [list addObject:[NSArray arrayWithObjects:_Name.text,temp,_Price.text,da,_Option.text, nil]];
+        NSString *path = [NSHomeDirectory() stringByAppendingString:@"/Documents/data/itemlist.txt"];
+        [list writeToFile:path atomically:YES];
+        path=[NSHomeDirectory() stringByAppendingString:@"/Documents/data/orderlist.txt"];
+        [orderlist writeToFile:path  atomically:YES];
+        
     }];
     
     //产生数量输入

@@ -63,8 +63,13 @@ extern NSMutableArray*orderlist;
     [dateFormatter setDateFormat:@"yyyy-MM-dd"];
     NSString *date =  [dateFormatter stringFromDate:_addDate.date];
     [list addObject:[NSArray arrayWithObjects:name,num,price,date,option,nil]];
+    [orderlist addObject:[NSArray arrayWithObjects:name,num,price,nil]];
+    
     NSString *path = [NSHomeDirectory() stringByAppendingString:@"/Documents/data/itemlist.txt"];
     [list writeToFile:path atomically:YES];
+    path=[NSHomeDirectory() stringByAppendingString:@"/Documents/data/orderlist.txt"];
+    [orderlist writeToFile:path  atomically:YES];
+    NSLog(@"%@",list);
     /*
     for (NSString *string in list) {
         NSLog(@"array6 content is %@",string);

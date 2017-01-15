@@ -19,9 +19,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     list = [[NSMutableArray alloc] init];
- //   [list addObject:[NSArray arrayWithObjects:@"牙膏",@"1",@"10",@"2017-4-3" ,@"",nil]];
- //   [list addObject:[NSArray arrayWithObjects:@"牙刷",@"2",@"10",@"2017-4-3" ,@"" ,nil]];
-  //  UITableView.delegate=self;
+    orderlist = [[NSMutableArray alloc] init];
     _itemTable.refreshControl= [UIRefreshControl new];
     [_itemTable.refreshControl addTarget:self action:@selector(handleRefresh) forControlEvents:UIControlEventValueChanged];
     NSFileManager *fm=[NSFileManager defaultManager];
@@ -37,10 +35,10 @@
         }else {
             NSLog(@"目录建立失败");
         }
-    
+    NSString *path=[NSHomeDirectory() stringByAppendingString:@"/Documents/data/orderlist.txt"];
         success = [fm createFileAtPath:file contents:nil attributes:nil];
-        
-        if(success){
+        BOOL success2 = [fm createFileAtPath:path contents:nil attributes:nil];
+        if(success&&success2){
             NSLog(@"文件建造成功");
         }else {
             NSLog(@"文件建立失败");
@@ -49,6 +47,13 @@
         NSLog(@"文件已存在");
        /* NSString *text = [[NSString alloc]initWithContentsOfFile:file encoding:NSUTF8StringEncoding error:nil];*/
         list = [[NSMutableArray alloc] initWithContentsOfFile:file];
+        if(list==nil){
+           list = [[NSMutableArray alloc] init];
+        }
+        orderlist = [[NSMutableArray alloc]initWithContentsOfFile:file];
+        if(orderlist==nil){
+            orderlist = [[NSMutableArray alloc] init];
+        }
         NSLog(@"%@",list);
     }
 }

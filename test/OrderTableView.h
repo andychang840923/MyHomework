@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface OrderTableView : UIViewController
+@interface OrderTableView : UIViewController<UITableViewDataSource,UITableViewDelegate>
+@property (strong, nonatomic) IBOutlet UITableView *ordertable;
 
 @end
